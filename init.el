@@ -57,7 +57,6 @@ values."
      ;; windows-defaults ;; kills the tab key
      pdf-tools
      lua
-     themes-megapack
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -152,7 +151,9 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
+   ;; https://themegallery.robdor.com/
+   dotspacemacs-themes '(afternoon
+                         spacemacs-dark
                          spacemacs-light)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
@@ -332,9 +333,7 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-  (setq-default dotspacemacs-themes '(afternoon)) 
-
-  ;; Use the file name for the window title
+;; Use the file name for the window title
   (setq frame-title-format "%b")
 
   (define-key evil-normal-state-map "l" 'evil-substitute)
@@ -582,11 +581,14 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ORG-agenda-files (list org-directory))
+ '(custom-safe-themes
+   (quote
+    ("28ec8ccf6190f6a73812df9bc91df54ce1d6132f18b4c8fcc85d45298569eb53" default)))
  '(helm-ag-base-command "pt -e --nocolor --nogroup")
  '(org-agenda-files
    (quote
-    ("c:/Users/dbeda7152005/Documents/private/notes/tasks.org" "c:/Users/dbeda7152005/Documents/private/notes/journal.org" "~/Documents/journal/notes.org" "c:/Users/dbeda7152005/Documents/software/emacs/org-mode/test1.org")))
- '(org-directory "~/../../Documents/private/notes/")
+    ("~/../../Documents/org/notes.org")))
+ '(org-directory "~/../../Documents/org/")
  '(org-preview-latex-process-alist
    (quote
     ((dvipng :programs
@@ -621,4 +623,4 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:background nil)))))
+ )
