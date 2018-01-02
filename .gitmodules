@@ -1,0 +1,3 @@
+[submodule "externalPackages/scimax"]
+	path = externalPackages/scimax
+	url = https://github.com/jkitchin/scimax

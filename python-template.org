@@ -1,0 +1,21 @@
+#+Title: %? 
+#+STARTUP: latexpreview
+#+OPTIONS: LaTeX:t
+
+%U
+* 
+#+BEGIN_SRC ipython :session :results output drawer 
+from tabulate import tabulate
+import pandas as pd
+import numpy as np
+import matplotlib
+from matplotlib import pyplot as plt
+plt.style.use('dark_background')
+%matplotlib_inline
+#plt.switch_backend('Qt5Agg')
+#plt.switch_backend('inline')
+
+#+END_SRC
+
+%i
+%a
