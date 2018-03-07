@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     octave
      javascript
      python
      ;; ----------------------------------------------------------------
@@ -68,6 +69,7 @@ values."
                                       interleave
                                       ob-ipython
                                       zotxt
+                                      octave
                                       key-chord ;; for hh escape binding -- doesn't work in visual mode..
                                       ;; TODO: emacs-ereader is causing some error messages during startup
                                       ;; (emacs-ereader :location (recipe :fetcher github :repo "bddean/emacs-ereader"))
@@ -333,7 +335,7 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-;; Use the file name for the window title
+  ;; Use the file name for the window title
   (setq frame-title-format "%b")
 
   (define-key evil-normal-state-map "l" 'evil-substitute)
@@ -348,7 +350,7 @@ you should place your code here."
   ;;(key-chord-define evil-insert-state-map "uu" 'undo-tree-undo)
   (key-chord-mode 1)
 
-  ;; I do not know of any way to show the whole file path.  So defining this function.
+  ;; I do not know of any way to show the whole file path for the current buffer.  This function will do that.
   (defun show-file-path ()
     "Show the full path file name in the minibuffer."
     (interactive)
@@ -362,6 +364,7 @@ you should place your code here."
   (setq evil-wait-fine-undo t)
   (setq line-move-visual t)
   ;; fallback font for unicode symbols, otherwithe sympy pprint doesn't work
+  ;; third org-mode bullet messed up if symbola not installed
   (set-fontset-font "fontset-default" nil
                       (font-spec :size 40 :name "Symbola"))
   ;; (setq undo-tree-auto-save-history t) ;; might cause corrupted undo history, need to try https://github.com/syl20bnr/spacemacs/issues/774
@@ -387,13 +390,15 @@ you should place your code here."
               (call-process "es" nil nil nil
                             "-inc-run-count" (convert-standard-filename file)))
             (helm-marked-candidates))))
-  (add-hook 'helm-find-many-files-after-hook 'helm-es-hook)  
-  
-  (setq org-base-path "~/../../Documents/private/notes/")
-  (setq org-snippets-path "~/../../Documents/private/snippets/")
+  (add-hook 'helm-find-many-files-after-hook 'helm-es-hook)
+
+  (setq org-base-path "~/org/")
+  (setq org-snippets-path "~/org/snippets/")
+  (setq org-journal-dir "~/org/journal/")
   (setq org-base-path-tasks  (concat org-base-path   "tasks.org"))
   (setq org-base-path-journal (concat org-base-path   "journal.org"))
   (setq org-base-path-meetings (concat org-base-path   "meetings.org"))
+
 
   (with-eval-after-load 'org
      (sp-pair "\[" "\]") ;; for latex fragments in org-mode
@@ -416,7 +421,7 @@ you should place your code here."
         (progn
       (kill-buffer temp-buffer-name)
       (if (string= result "")
-          (progn 
+          (progn
             (insert (concat "[[./" the-file ".attachments/" png-file-name "]]"))
             (org-display-inline-images))
         (insert result))))))
@@ -557,7 +562,7 @@ you should place your code here."
 
     )
 
-  
+
   ;; real-auto-save
   (require 'real-auto-save)
   (add-hook 'prog-mode-hook 'real-auto-save-mode)
@@ -587,8 +592,8 @@ you should place your code here."
  '(helm-ag-base-command "pt -e --nocolor --nogroup")
  '(org-agenda-files
    (quote
-    ("~/../../Documents/org/notes.org")))
- '(org-directory "~/../../Documents/org/")
+    ("~/org/notes.org" "~/org/tasks.org")))
+ '(org-directory "~/org/")
  '(org-preview-latex-process-alist
    (quote
     ((dvipng :programs
@@ -617,7 +622,7 @@ you should place your code here."
                   ("convert -density %D -trim -antialias %f -quality 100 %O")))))
  '(package-selected-packages
    (quote
-    (zenburn-theme zen-and-art-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme web-beautify lua-mode livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern tern coffee-mode stickyfunc-enhance srefactor evil-smartparens excorporate url-http-ntlm soap-client fsm ntlm real-auto-save zotxt request-deferred deferred org-journal ob-ipython dash-functional diminish avy packed smartparens highlight evil helm helm-core projectile hydra f latex-math-preview interleave pdf-tools tablist recentf-ext jump-char iy-go-to-char buffer-move better-shell smeargle slime-company slime orgit org-projectile org-present org org-pomodoro alert log4e gntp org-download mmm-mode markdown-toc markdown-mode magit-gitflow htmlize helm-gitignore gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md evil-magit magit magit-popup git-commit with-editor common-lisp-snippets mwim helm-company helm-c-yasnippet company-statistics company-anaconda company auto-yasnippet yasnippet ac-ispell auto-complete yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode anaconda-mode pythonic ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spacemacs-theme spaceline restart-emacs request rainbow-delimiters quelpa popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump define-word column-enforce-mode clean-aindent-mode auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))))
+    (zenburn-theme zen-and-art-theme underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spacegray-theme soothe-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme reverse-theme railscasts-theme purple-haze-theme professional-theme planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme organic-green-theme omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme naquadah-theme mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme lush-theme light-soap-theme jbeans-theme jazz-theme ir-black-theme inkpot-theme heroku-theme hemisu-theme hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme gandalf-theme flatui-theme flatland-theme farmhouse-theme espresso-theme dracula-theme django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme web-beautify lua-mode livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern tern coffee-mode stickyfunc-enhance srefactor evil-smartparens excorporate url-http-ntlm soap-client fsm ntlm real-auto-save zotxt request-deferred deferred org-journal ob-ipython dash-functional diminish avy packed smartparens highlight evil helm helm-core projectile hydra f latex-math-preview interleave pdf-tools tablist recentf-ext jump-char iy-go-to-char buffer-move better-shell smeargle slime-company slime orgit org-projectile org-present org org-pomodoro alert log4e gntp org-download mmm-mode markdown-toc markdown-mode magit-gitflow htmlize helm-gitignore gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md evil-magit magit magit-popup git-commit with-editor common-lisp-snippets mwim helm-company helm-c-yasnippet company-statistics company-anaconda company auto-yasnippet yasnippet ac-ispell auto-complete yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode anaconda-mode pythonic ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spacemacs-theme spaceline restart-emacs request rainbow-delimiters quelpa popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump define-word column-enforce-mode clean-a//lndent-mode auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
