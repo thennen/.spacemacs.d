@@ -1,0 +1,16 @@
+elpa
+*.html
+*.tex
+*.pdf
+*.org#
+user/
+sandbox
+el-get
+/html-clip-w32.py
+/ac-comphist.dat
+auto-save-list/
+uservar
+test
+.DS_STORE
+ltximg
+*.elc
