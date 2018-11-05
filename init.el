@@ -47,7 +47,7 @@ values."
      markdown
      org
      common-lisp
-     journal
+     ;;journal
      ;; semantic ;; spacemacs layer for srefactor SPC m r	srefactor: refactor thing at point. (can be very slow on init.el)
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -70,6 +70,7 @@ values."
                                       ob-ipython
                                       zotxt
                                       octave
+                                      spice-mode
                                       key-chord ;; for hh escape binding -- doesn't work in visual mode..
                                       ;; TODO: emacs-ereader is causing some error messages during startup
                                       ;; (emacs-ereader :location (recipe :fetcher github :repo "bddean/emacs-ereader"))
@@ -593,6 +594,7 @@ you should place your code here."
  '(custom-safe-themes
    (quote
     ("28ec8ccf6190f6a73812df9bc91df54ce1d6132f18b4c8fcc85d45298569eb53" default)))
+ '(evil-want-Y-yank-to-eol nil)
  '(helm-ag-base-command "pt -e --nocolor --nogroup")
  '(org-agenda-files (quote ("~/org/notes.org" "~/org/tasks.org")))
  '(org-directory "~/org/")
